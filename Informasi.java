@@ -96,7 +96,8 @@ public class Informasi extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void selesaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selesaiActionPerformed
-        // TODO add your handling code here:
+        
+        // Todo
         setVisible(false);
 }//GEN-LAST:event_selesaiActionPerformed
         

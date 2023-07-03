@@ -1,5 +1,8 @@
 
 import java.awt.Dimension;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -50,71 +53,128 @@ public class Perintah {
         
         String[] in = inputPerintah.split(" ");
 
-        /*Menerima input yang merupakan perintah akan apa yang akan dilakukan oleh turtle 
-         *Beberapa juga akan menerima paramater (ada yang satu ada yang dua parameter) untuk memberikan mereka ukuran
-         bentuk yang akan mereka buat.
-        */
+        int index = 0;
+        int loop_how_many = 1;
 
-        boolean isArgumentValid = this.isArgumentValid(in);
+        if (in[0].equalsIgnoreCase("loop")) {
 
-        if (!isArgumentValid) {
-            // Jika argumen yang diberikan tidak valid
-            canvas.repaint(); 
-            return "Argumen yang diberikan tidak sesuai dengan perintah.";
-        } else {
-            // Jika argumen sudah valid
-            if (in[0].equalsIgnoreCase("selesai"))
-                System.exit(0);
-            else if (in[0].equalsIgnoreCase("reset"))
-                kurakuraku.reset();
-            else if (in[0].equalsIgnoreCase("maju"))
-                kurakuraku.maju(Integer.parseInt(in[1]));
-            else if (in[0].equalsIgnoreCase("mundur"))
-                kurakuraku.mundur(Integer.parseInt(in[1]));
-            else if (in[0].equalsIgnoreCase("rotasi"))
-                kurakuraku.rotasi(Integer.parseInt(in[1]));
-            else if (in[0].equalsIgnoreCase("segitigasikusiku"))
-                buatSegitigaSikuSiku(Integer.parseInt(in[1]), Integer.parseInt(in[2]));
-            else if (in[0].equalsIgnoreCase("kotak"))
-                buatKotak(Integer.parseInt(in[1]));
-            else if (in[0].equalsIgnoreCase("segitiga"))
-                buatSegitiga(Integer.parseInt(in[1]));
-            else if (in[0].equalsIgnoreCase("persegi"))
-                buatPersegi(Integer.parseInt(in[1]), Integer.parseInt(in[2]));
-            else if (in[0].equalsIgnoreCase("pohon"))
-                buatPohon();
-            else if (in[0].equalsIgnoreCase("jejak"))
-                kurakuraku.setJejak(Boolean.parseBoolean(in[1]));
-            else if (in[0].equalsIgnoreCase("pindah"))
-                kurakuraku.setPosition(new Dimension(Integer.parseInt(in[1]),Integer.parseInt(in[2])));
-            else {
+            if (in.length < 2 || !this.isArgumentValid(Arrays.copyOfRange(in, 0, 2))) {
+                // Jika argumen yang diberikan tidak valid
                 canvas.repaint(); 
-                return "Perintah tidak dipahami.";
+                return "Argumen yang diberikan tidak sesuai dengan perintah.";
+            }
+            
+            loop_how_many = Integer.parseInt(in[1]);
+
+            index = 2;
+        }
+
+        // Dapatkan perintah-perintah yang ada (terutama untuk loop),
+        // Jika bukan loop, maka isi dari list hanya 1 perintah saja
+        List<String> list_of_perintah = new ArrayList<String>();
+
+        while (in.length > index) {
+            int original_index = index;
+
+            // Perintah-perintah yang membutuhkan 1 argumen
+            if (in[original_index].equalsIgnoreCase("maju") || in[original_index].equalsIgnoreCase("mundur") || in[original_index].equalsIgnoreCase("rotasi") || in[original_index].equalsIgnoreCase("kotak") || in[original_index].equalsIgnoreCase("segitiga") || in[original_index].equalsIgnoreCase("jejak")) {
+                index = index + 2;
+            // Perintah-perintah yang membutuhkan 2 argumen
+            } else if (in[original_index].equalsIgnoreCase("persegi") || in[original_index].equalsIgnoreCase("pindah") || in[original_index].equalsIgnoreCase("segitigasikusiku")) {
+                index = index + 3;
+            } else {
+                index = index + 1;
+            }
+
+            String[] temp_list_split;
+            if (in.length > index) {
+                temp_list_split = Arrays.copyOfRange(in, original_index, index);
+            } else {
+                temp_list_split = Arrays.copyOfRange(in, original_index, in.length);
+            }
+            boolean isArgumentValid = this.isArgumentValid(temp_list_split);
+
+            if (!isArgumentValid) {
+                // Jika argumen yang diberikan tidak valid
+                canvas.repaint(); 
+                return "Argumen yang diberikan tidak sesuai dengan perintah.";
+            } else {
+                list_of_perintah.add(String.join(" ", temp_list_split));
+            }
+
+            if (!in[0].equalsIgnoreCase("loop")) {
+                break;
             }
         }
-        
+
+        // Lakukan sesuai banyak looping jika ada perintah loop
+        // Atau 1 kali saja jika tanpa perintah loop
+        for (int i=0; i < loop_how_many; i++) {
+
+            /*Menerima input yang merupakan perintah akan apa yang akan dilakukan oleh turtle 
+            *Beberapa juga akan menerima paramater (ada yang satu ada yang dua parameter) untuk memberikan mereka ukuran
+            bentuk yang akan mereka buat.
+            */
+
+            // Untuk tiap loop, lakukan perintah-perintah yang ada pada list perintah
+            for (int j=0; j < list_of_perintah.size(); j++) {
+                String[] temp_split = list_of_perintah.get(j).split(" ");
+
+                if (temp_split[0].equalsIgnoreCase("selesai"))
+                    System.exit(0);
+                else if (temp_split[0].equalsIgnoreCase("reset"))
+                    kurakuraku.reset();
+                else if (temp_split[0].equalsIgnoreCase("maju"))
+                    kurakuraku.maju(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("mundur"))
+                    kurakuraku.mundur(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("rotasi"))
+                    kurakuraku.rotasi(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("segitigasikusiku"))
+                    buatSegitigaSikuSiku(Integer.parseInt(temp_split[1]), Integer.parseInt(temp_split[2]));
+                else if (temp_split[0].equalsIgnoreCase("kotak"))
+                    buatKotak(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("segitiga"))
+                    buatSegitiga(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("persegi"))
+                    buatPersegi(Integer.parseInt(temp_split[1]), Integer.parseInt(temp_split[2]));
+                else if (temp_split[0].equalsIgnoreCase("pohon"))
+                    buatPohon();
+                else if (temp_split[0].equalsIgnoreCase("jejak"))
+                    kurakuraku.setJejak(Boolean.parseBoolean(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("pindah"))
+                    kurakuraku.setPosition(new Dimension(Integer.parseInt(temp_split[1]), Integer.parseInt(temp_split[2])));
+                else {
+                    canvas.repaint(); 
+                    return "Perintah tidak dipahami.";
+                }
+            }
+        }
+
         canvas.repaint();    
         return "Perintah sudah dilaksanakan.";
+
     }
+   
     /*Membuat bentuk kotak
      * menerima satu parameter berupa ukuran yang akan
-     * mengatur seberapa besar kotak yang akan dibuat
+     * mengatur seberapa panjang keempat sisi kotak ini
      */
     public void buatKotak(int ukuran ){        
-        for (int i=0;i<4;i++){
-            kurakuraku.maju(ukuran);
-            kurakuraku.rotasi(90);
+        for (int i=0;i<4;i++){          // Looping untuk membuat gerakan berulang sehingga membentuk kotak
+            kurakuraku.maju(ukuran);    // Maju sesuai ukuran yang diminta
+            kurakuraku.rotasi(90);    // Melakukan rotasi ke kanan sebesar 90 derajat
         }
     }
 
     /*Membuat bentuk segitiga sama sisi
-     * menerima satu parameter berupa ukurang yang akan
+     * menerima satu parameter berupa ukuran yang akan
      * mengatur seberapa panjang ketiga sisi dari segitiga itu
      */
     public void buatSegitiga(int ukuran){
-        for (int i=0;i<3;i++) {
-            kurakuraku.maju(ukuran);
-            kurakuraku.rotasi(-120);
+        for (int i=0;i<3;i++) {         // Looping untuk membuat gerakan berulang sehingga membentuk segitiga
+            kurakuraku.maju(ukuran);    // Maju sesuai ukurang yang diminta
+            kurakuraku.rotasi(-120);    // Melakukan rotasi ke kiri sebesar 120 derajat
         }
 
     }  
@@ -124,16 +184,16 @@ public class Perintah {
      * Dilengkapi dengan perhitungan untuk menentukan sudut x dan y serta panjang sisi miring
      */
     public void buatSegitigaSikuSiku(int panjangAlas, int tinggi){
-        double miring = Math.sqrt(Math.pow(panjangAlas, 2) + Math.pow(tinggi, 2)); 
+        double miring = Math.sqrt(Math.pow(panjangAlas, 2) + Math.pow(tinggi, 2));      //perhitungan untuk menghitung sisi miring
 
-        double sudutAlasDanMiring = Math.toDegrees(Math.asin((double) tinggi / miring));
+        double sudutAlasDanMiring = Math.toDegrees(Math.asin((double) tinggi / miring));    //perhitungan untuk menghitung sudut antara alas dan sisi miring
         
-        kurakuraku.maju(panjangAlas);
-        kurakuraku.rotasi(-(180-sudutAlasDanMiring));
-        kurakuraku.maju(miring);
-        kurakuraku.rotasi(-(sudutAlasDanMiring + 90));   
-        kurakuraku.maju(tinggi);
-        kurakuraku.rotasi(-(90));     
+        kurakuraku.maju(panjangAlas);                   //turtle maju sesuai panjang alas
+        kurakuraku.rotasi(-(180-sudutAlasDanMiring));   //melakukan rotasi untuk membuat sisi miringnya
+        kurakuraku.maju(miring);                        //turtle maju sepanjang panjang sisi miring
+        kurakuraku.rotasi(-(sudutAlasDanMiring + 90));  //melakukan rotasi untuk membuat sisi tingginya 
+        kurakuraku.maju(tinggi);                        // turtle maju sesuai panjang tinggi
+        kurakuraku.rotasi(-(90));                       //melakukan rotasi kekanan untuk kembali ke 
     }
 
     /*Membuat sebuah persegi panjang
@@ -141,42 +201,42 @@ public class Perintah {
      * Kedua parameter ini akan menentukan seberapa besar persegi panjang yang akan di buat
      */
     public void buatPersegi(int panjang, int lebar){
-        kurakuraku.maju(panjang);
-        kurakuraku.rotasi(-90);
-        kurakuraku.maju(lebar);
-        kurakuraku.rotasi(-90);
-        kurakuraku.maju(panjang);
-        kurakuraku.rotasi(-90);
-        kurakuraku.maju(lebar);
-        kurakuraku.rotasi(-90);
+        kurakuraku.maju(panjang);   //Maju sesuai panjang yang diminta
+        kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
+        kurakuraku.maju(lebar);     //Maju sesuai lebar yang diminta
+        kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
+        kurakuraku.maju(panjang);   //Maju sesuai panjang yang diminta
+        kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
+        kurakuraku.maju(lebar);     //Maju sesuai lebar yang diminta
+        kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
     }
-    
+
     /*Tidak menerima parameter
      * Membuat bentuk pohon dengan ranting-ranting sebagai cabangnya
      */
     public void buatPohon(){        
-        kurakuraku.setJejak(false);
-        kurakuraku.reset();
-        kurakuraku.rotasi(90);
-        kurakuraku.maju(100);
-        kurakuraku.rotasi(180);
-        buatPohon(6,50);        
-        kurakuraku.reset();
+        kurakuraku.setJejak(false);     //Set jejak di false agar tidak memberi coretan
+        kurakuraku.reset();               //Mereset kembali si turtle
+        kurakuraku.rotasi(90);          //Melakukan rotasi ke kanan sebesar 90 derajat
+        kurakuraku.maju(100);       //Maju dengan jarak 100
+        kurakuraku.rotasi(180);         //Melakukan rotasi sebesar 180 derajat
+        buatPohon(6,50);    //Pohon melakukan pemisahan sebanyak 6 kali dan panjangnya awalnya adalah 50
+        kurakuraku.reset();               //Mereset kembali si turtle
     }
     
-    private void buatPohon(int ukuran, int tinggi){
-        if (ukuran>0){
-            kurakuraku.setJejak(true);
-            kurakuraku.maju(tinggi);                        
-            kurakuraku.rotasi(-45);
-            Dimension posAwal = kurakuraku.getPosition();
-            double arah = kurakuraku.getArah();
-            double sudut = arah;
-            for(int i=0;i<3;i++){
-                buatPohon(ukuran-1,(int)(tinggi/1.5));
-                kurakuraku.setJejak(false);
-                kurakuraku.setPosition(posAwal);
-                kurakuraku.setArah(arah);   
+    private void buatPohon(int ukuran, int tinggi){         //Menerima parameter ukuran dan tinggi
+        if (ukuran>0){                                      //Base case condition untuk loop
+            kurakuraku.setJejak(true);                    //Set jejak true untuk membuat coretan dari turtle
+            kurakuraku.maju(tinggi);                        //Kura-kura maju sesuai tinggi yang diinput
+            kurakuraku.rotasi(-45);                         //Kura-kura melakukan rotasi sebesar 45 derajat ke kiri
+            Dimension posAwal = kurakuraku.getPosition();   //
+            double arah = kurakuraku.getArah();             //
+            double sudut = arah;                            //
+            for(int i=0;i<3;i++){                           //Melakukan for loop dan terdapat condition untuk loop itu
+                buatPohon(ukuran-1,(int)(tinggi/1.5));      //Ukuran di -1 untuk loop sampai 0, tinggi dibagi 1.5 agar semakin kecil
+                kurakuraku.setJejak(false);               //SetJejak false sehingga kura-kura tidak mencoret
+                kurakuraku.setPosition(posAwal);            //Kura-kura kembali ke posisi awal
+                kurakuraku.setArah(arah);                   //
                 
                 // Tambah kotak di ujung
                 if (ukuran == 1) {
@@ -232,7 +292,7 @@ public class Perintah {
         }
 
         // Perintah-perintah yang membutuhkan 1 argumen
-        if (in[0].equalsIgnoreCase("maju") || in[0].equalsIgnoreCase("mundur") || in[0].equalsIgnoreCase("rotasi") || in[0].equalsIgnoreCase("kotak") || in[0].equalsIgnoreCase("segitiga") || in[0].equalsIgnoreCase("jejak")) {
+        if (in[0].equalsIgnoreCase("loop") || in[0].equalsIgnoreCase("maju") || in[0].equalsIgnoreCase("mundur") || in[0].equalsIgnoreCase("rotasi") || in[0].equalsIgnoreCase("kotak") || in[0].equalsIgnoreCase("segitiga") || in[0].equalsIgnoreCase("jejak")) {
             if (!argumen_ada_satu || !argumen_type_valid) {
                 return false;
             }
