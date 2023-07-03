@@ -47,8 +47,8 @@ public class Kurakura {
     /** Creates a new instance of Kurakura */
     public Kurakura() {
       
-      java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Kurakuraku");       
-      imageName = bundle.getString("image"); 
+      java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("Kurakuraku");      //Memberikan nama untuk kura-kura yang akan dipakai 
+      imageName = bundle.getString("image");                                                        //Menambahkan gambar sebagai bentuk kura-kura
         
       img = java.awt.Toolkit.getDefaultToolkit().getImage(imageName);
       
@@ -61,55 +61,55 @@ public class Kurakura {
     /** Membuat object kurakura dengan ukuran lebar tinggi tertentu */
     public Kurakura(int w, int h){
         this();
-        setSize(w,h);
-        reset();
+        setSize(w,h);           //Menentukan ukuran dari kura-kura
+        reset();                
     }
     
     public void setSize(int w, int h){        
-        width = w;
-        height = h;        
+        width = w;              //Menentukan w sebagai width
+        height = h;             //menentukan h sebagai height
         imgJejak = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
     }
     
     /** Mengatur posisi kura-kura ke posisi awal */
     public void reset(){        
-        x = width/2-15;
-        y = height/2-20;   
+        x = width/2-15;         //Menentukan posisi x kura-kura saat dilakukan reset
+        y = height/2-20;        //Menentukan posisi y kura-kura saat dilakuakn reset
         matTrans.setToTranslation(x, y);
     }
     
-    public void rotasi(double d){        
-        arah += Math.toRadians(d);
+    public void rotasi(double d){        //Meneirma d sebagai parameter berapa derajat rotasi akan terjadi
+        arah += Math.toRadians(d);      //Menambahkan nilai arah untuk gerakan rotasi kura-kura
         matRotasi.setToRotation(arah,img.getWidth(null)/2,img.getHeight(null)/2); // rotasi dihitung dari pusat image.              
     }
     
-    public void maju(double jarak){
+    public void maju(double jarak){         //Menerima jarak sebagai parameter berapa jauh kura-kura akan maju
         double dx,dy;
-        dx = jarak * Math.cos(arah);
-        dy = jarak * Math.sin(arah); 
+        dx = jarak * Math.cos(arah);        //Melakukan perhitungan untuk nilai dx dengan perhitungan cos
+        dy = jarak * Math.sin(arah);        // Melakukan perhitungan untuk nilai dy dengan perhitungan sin
         
         if (jejak){
             Graphics2D g = imgJejak.createGraphics();
             g.draw(new java.awt.geom.Line2D.Double(x,y,x+dx,y+dy));
         }
         
-        x += dx;
-        y += dy;
+        x += dx;                            //Nilai dx ditambahkan ke x
+        y += dy;                            //Nilai dy ditambahkan ke y
         matTrans.setToTranslation(x,y);
     }
     
-    public void mundur(double jarak){
+    public void mundur(double jarak){      // Menerima jarak sebagai parameter untuk menentukan berarpa jauh kura-kura akan mundur
         double dx,dy;
-        dx = jarak * Math.cos(arah);
-        dy = jarak * Math.sin(arah); 
+        dx = jarak * Math.cos(arah);       //Melakukan perhitungan untuk nilai dx dengan perhitungan cos
+        dy = jarak * Math.sin(arah);       // Melakukan perhitungan untuk nilai dy dengan perhitungan sin
         
         if (jejak){
             Graphics2D g = imgJejak.createGraphics();
             g.draw(new java.awt.geom.Line2D.Double(x,y,x-dx,y+dy));
         }
         
-        x -= dx;
-        y -= dy;
+        x -= dx;                        //Nilai x dikurangi dx
+        y -= dy;                        //Nilai y dikurangi dy
         matTrans.setToTranslation(x,y);
     }
     
@@ -150,7 +150,7 @@ public class Kurakura {
      * @return informasi posisi kurakura saat ini dalam object {@code Dimension}
      *  
      */
-    public Dimension getPosition(){
+    public Dimension getPosition(){ 
         return new Dimension(x,y);
     }
 
@@ -161,9 +161,9 @@ public class Kurakura {
      * @param informasi posisi kurakura dalam object {@code Dimension}
      *  
      */
-    public void setPosition(Dimension pos){
-        x = (int) pos.getWidth();
-        y = (int) pos.getHeight();
+    public void setPosition(Dimension pos){         //Untuk menentukan posisi dari Kura-kura
+        x = (int) pos.getWidth();                   //Menentukan x dengan width 
+        y = (int) pos.getHeight();                  //Menentukan y dengan height
         matTrans.setToTranslation(x, y);
     }
     
@@ -171,8 +171,8 @@ public class Kurakura {
         return arah;
     }
     
-    public void setArah(double a){
-        arah =a;
+    public void setArah(double a){          //Menerima a sebagai parameter untuk setArah
+        arah =a;                            //Nilai a disimpan pada variabel arah
         matRotasi.setToRotation(arah,img.getWidth(null)/2,img.getHeight(null)/2); // rotasi dihitung dari pusat image.              
     }
 }
