@@ -56,7 +56,7 @@ public class Perintah {
         int index = 0;
         int loop_how_many = 1;
 
-        if (in[0].equalsIgnoreCase("loop")) {
+        if (in[0].equalsIgnoreCase("loop")) {           //Sebuah kondisi dimana ada loop diawal input yang akan mengantarkan ke fungsi looping
 
             if (in.length < 2 || !this.isArgumentValid(Arrays.copyOfRange(in, 0, 2))) {
                 // Jika argumen yang diberikan tidak valid
@@ -69,8 +69,9 @@ public class Perintah {
             index = 2;
         }
 
-        // Dapatkan perintah-perintah yang ada (terutama untuk loop),
-        // Jika bukan loop, maka isi dari list hanya 1 perintah saja
+        /* Dapatkan perintah-perintah yang ada (terutama untuk loop),
+        Jika bukan loop, maka isi dari list hanya 1 perintah saja
+        */
         List<String> list_of_perintah = new ArrayList<String>();
 
         while (in.length > index) {
@@ -97,12 +98,12 @@ public class Perintah {
             if (!isArgumentValid) {
                 // Jika argumen yang diberikan tidak valid
                 canvas.repaint(); 
-                return "Argumen yang diberikan tidak sesuai dengan perintah.";
+                return "Argumen yang diberikan tidak sesuai dengan perintah.";      //mengisi pesan saat argumen tidak valid
             } else {
-                list_of_perintah.add(String.join(" ", temp_list_split));
+                list_of_perintah.add(String.join(" ", temp_list_split));    //Menambahkan perintah ke list
             }
 
-            if (!in[0].equalsIgnoreCase("loop")) {
+            if (!in[0].equalsIgnoreCase("loop")) {                      //Jika tidak diawali dengan loop, maka akan melakukan break      
                 break;
             }
         }
@@ -229,24 +230,24 @@ public class Perintah {
             kurakuraku.setJejak(true);                    //Set jejak true untuk membuat coretan dari turtle
             kurakuraku.maju(tinggi);                        //Kura-kura maju sesuai tinggi yang diinput
             kurakuraku.rotasi(-45);                         //Kura-kura melakukan rotasi sebesar 45 derajat ke kiri
-            Dimension posAwal = kurakuraku.getPosition();   //
-            double arah = kurakuraku.getArah();             //
-            double sudut = arah;                            //
+            Dimension posAwal = kurakuraku.getPosition();   //Menentukan posisi dari kura-kura
+            double arah = kurakuraku.getArah();             //Menunjukan arah gerak dari kura-kura
+            double sudut = arah;                            //Menyimpan arah di dalam varibel sudut
             for(int i=0;i<3;i++){                           //Melakukan for loop dan terdapat condition untuk loop itu
                 buatPohon(ukuran-1,(int)(tinggi/1.5));      //Ukuran di -1 untuk loop sampai 0, tinggi dibagi 1.5 agar semakin kecil
                 kurakuraku.setJejak(false);               //SetJejak false sehingga kura-kura tidak mencoret
                 kurakuraku.setPosition(posAwal);            //Kura-kura kembali ke posisi awal
-                kurakuraku.setArah(arah);                   //
+                kurakuraku.setArah(arah);                   //Untuk menentukan arah kura-kura
                 
                 // Tambah kotak di ujung
-                if (ukuran == 1) {
-                    kurakuraku.setJejak(true);
-                    buatKotak(10);
-                    kurakuraku.setJejak(false);
+                if (ukuran == 1) {                          //Menjadi syarat untuk program berikutnya
+                    kurakuraku.setJejak(true);            //SetJejak true sehingga kura-kura mencoret saat bergerak
+                    buatKotak(10);                   //Memanggil function membuat kotak dengan ukuran 10
+                    kurakuraku.setJejak(false);           //SetJejak false untuk menghindari coretan saat kura-kura bergerak
                 } 
 
-                sudut+=45;
-                kurakuraku.rotasi(sudut);
+                sudut+=45;                                  //Menambahkan sudut 45 derajat agar garis terlihat
+                kurakuraku.rotasi(sudut);                   //Kura-kura melakukan rotasi sesuai sudut
             }     
         }
         kurakuraku.reset();
@@ -280,7 +281,7 @@ public class Perintah {
         }
 
         // Jika ada 2 argumen
-        if (in.length >= 3) {
+        if (in.length >= 3) {               // jika panjangnya adalah 3 atau lebih, nilai argumen_ada_dua adalah true
             argumen_ada_dua = true;
 
             // argumen kedua cek valid atau tidak (digit atau bukan)
@@ -293,13 +294,13 @@ public class Perintah {
 
         // Perintah-perintah yang membutuhkan 1 argumen
         if (in[0].equalsIgnoreCase("loop") || in[0].equalsIgnoreCase("maju") || in[0].equalsIgnoreCase("mundur") || in[0].equalsIgnoreCase("rotasi") || in[0].equalsIgnoreCase("kotak") || in[0].equalsIgnoreCase("segitiga") || in[0].equalsIgnoreCase("jejak")) {
-            if (!argumen_ada_satu || !argumen_type_valid) {
+            if (!argumen_ada_satu || !argumen_type_valid) {         //Jika kondisi ini tidak terpenuhi, akan mereturn false
                 return false;
             }
         // Perintah-perintah yang membutuhkan 2 argumen
         } else if (in[0].equalsIgnoreCase("persegi") || in[0].equalsIgnoreCase("pindah") || in[0].equalsIgnoreCase("segitigasikusiku")) {
-            if (!argumen_ada_dua || !argumen_type_valid) {
-                return false;
+            if (!argumen_ada_dua || !argumen_type_valid) {         //Jika kondisi ini tidak terpenuhi, akan mereturn false
+                return false;           
             }
         }
 
