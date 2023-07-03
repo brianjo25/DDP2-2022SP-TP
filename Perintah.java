@@ -64,14 +64,15 @@ public class Perintah {
                 return "Argumen yang diberikan tidak sesuai dengan perintah.";
             }
             
-            loop_how_many = Integer.parseInt(in[1]);
+            loop_how_many = Integer.parseInt(in[1]);                //Mengambil argumen dan menyimpannya di loop_how_many dalam bentuk integer
 
-            index = 2;
+            index = 2;                                              //Menginisiasi index dengan nilai 2
         }
 
         /* Dapatkan perintah-perintah yang ada (terutama untuk loop),
         Jika bukan loop, maka isi dari list hanya 1 perintah saja
         */
+
         List<String> list_of_perintah = new ArrayList<String>();
 
         while (in.length > index) {
