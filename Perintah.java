@@ -184,6 +184,8 @@ public class Perintah {
 
     }  
     
+    
+    
     /*Membuat segitiga siku-siku dan menerima 2 parameter
      * satu untuk tinggi, satu untuk panjang alas
      * Dilengkapi dengan perhitungan untuk menentukan sudut x dan y serta panjang sisi miring
@@ -214,6 +216,27 @@ public class Perintah {
         kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
         kurakuraku.maju(lebar);     //Maju sesuai lebar yang diminta
         kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
+    }
+
+    public void buatBoxes(int ukuran){
+        kurakuraku.maju(ukuran);    
+        kurakuraku.rotasi(90);
+        kurakuraku.maju(ukuran);    
+        kurakuraku.rotasi(90);
+        kurakuraku.maju(ukuran);    
+        kurakuraku.rotasi(90);
+        kurakuraku.maju(ukuran);
+        kurakuraku.rotasi(90);
+
+        if (ukuran >= 0){
+            kurakuraku.setJejak(false);
+            kurakuraku.maju(10);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(10);
+            kurakuraku.rotasi(270);
+            kurakuraku.setJejak(true);
+            buatKotak(ukuran-20);
+        }
     }
 
     /*Tidak menerima parameter
