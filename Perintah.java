@@ -169,6 +169,9 @@ public class Perintah {
         }
     }
 
+
+
+
     /*Membuat bentuk segitiga sama sisi
      * menerima satu parameter berupa ukuran yang akan
      * mengatur seberapa panjang ketiga sisi dari segitiga itu
