@@ -136,6 +136,8 @@ public class Perintah {
                     buatSegitigaSikuSiku(Integer.parseInt(temp_split[1]), Integer.parseInt(temp_split[2]));
                 else if (temp_split[0].equalsIgnoreCase("kotak"))
                     buatKotak(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("boxes"))
+                    buatBoxes(Integer.parseInt(temp_split[1]));
                 else if (temp_split[0].equalsIgnoreCase("segitiga"))
                     buatSegitiga(Integer.parseInt(temp_split[1]));
                 else if (temp_split[0].equalsIgnoreCase("persegi"))
@@ -184,7 +186,19 @@ public class Perintah {
 
     }  
     
-    
+    public void buatSierpinski(int ukuran, int x, int y){
+        int tengah = ukuran/2;
+        if (ukuran > 0){
+            buatSierpinski(tengah, x, y + tengah);
+            buatSierpinski(tengah, x+tengah/2, y);
+            buatSierpinski(tengah, x+tengah, tengah);
+        }
+
+        else{
+            buatSegitiga(ukuran);
+        }
+
+    }
     
     /*Membuat segitiga siku-siku dan menerima 2 parameter
      * satu untuk tinggi, satu untuk panjang alas
@@ -218,6 +232,13 @@ public class Perintah {
         kurakuraku.rotasi(-90);     //Berotasi ke kiri sejauh 90 derajat
     }
 
+    /**
+     * Buat boxes merupakan sebuah fungsi yang meenggunakan rekursif
+     * fungsi ini akan menerima parameter ukuran dan akan membuat kotak
+     * rekursif dipakai saat membuat kotak semakin dalam dengan ukuran semakin kecil
+     * @param ukuran merupakan parameter yang diterima fungsi untuk untuk menggambarkan
+     * ukuran dari kotak pertama yang akan terus dikurangi dalam rekursif
+     */
     public void buatBoxes(int ukuran){
         kurakuraku.maju(ukuran);    
         kurakuraku.rotasi(90);
@@ -228,7 +249,7 @@ public class Perintah {
         kurakuraku.maju(ukuran);
         kurakuraku.rotasi(90);
 
-        if (ukuran >= 0){
+        if (ukuran > 0){
             kurakuraku.setJejak(false);
             kurakuraku.maju(10);
             kurakuraku.rotasi(90);
