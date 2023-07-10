@@ -79,7 +79,7 @@ public class Perintah {
             int original_index = index;
 
             // Perintah-perintah yang membutuhkan 1 argumen
-            if (in[original_index].equalsIgnoreCase("maju") || in[original_index].equalsIgnoreCase("mundur") || in[original_index].equalsIgnoreCase("rotasi") || in[original_index].equalsIgnoreCase("kotak") || in[original_index].equalsIgnoreCase("segitiga") || in[original_index].equalsIgnoreCase("jejak")) {
+            if (in[original_index].equalsIgnoreCase("maju") || in[original_index].equalsIgnoreCase("mundur") || in[original_index].equalsIgnoreCase("rotasi") || in[original_index].equalsIgnoreCase("kotak") || in[original_index].equalsIgnoreCase("segitiga") || in[original_index].equalsIgnoreCase("jejak") || in[original_index].equalsIgnoreCase("boxes") || in[original_index].equalsIgnoreCase("sierpinski") || in[original_index].equalsIgnoreCase("fractal")) {
                 index = index + 2;
             // Perintah-perintah yang membutuhkan 2 argumen
             } else if (in[original_index].equalsIgnoreCase("persegi") || in[original_index].equalsIgnoreCase("pindah") || in[original_index].equalsIgnoreCase("segitigasikusiku")) {
@@ -138,6 +138,22 @@ public class Perintah {
                     buatKotak(Integer.parseInt(temp_split[1]));
                 else if (temp_split[0].equalsIgnoreCase("boxes"))
                     buatBoxes(Integer.parseInt(temp_split[1]));
+                else if (temp_split[0].equalsIgnoreCase("sierpinski"))
+                    buatSierpinski(Integer.parseInt(temp_split[1]), 0, 0);
+                else if (temp_split[0].equalsIgnoreCase("fractal")) {
+                    int ukuran = Integer.parseInt(temp_split[1]);
+                    // Buat kotak besar
+                    buatKotak(ukuran);
+
+                    // Pergi untuk siap-siap membuat kotak di tengah
+                    kurakuraku.setJejak(false);
+                    kurakuraku.maju(ukuran/3);
+                    kurakuraku.rotasi(90);
+                    kurakuraku.maju(ukuran/3);
+                    kurakuraku.rotasi(-90);
+
+                    buatFractal(ukuran);
+                }
                 else if (temp_split[0].equalsIgnoreCase("segitiga"))
                     buatSegitiga(Integer.parseInt(temp_split[1]));
                 else if (temp_split[0].equalsIgnoreCase("persegi"))
@@ -184,18 +200,38 @@ public class Perintah {
             kurakuraku.rotasi(-120);    // Melakukan rotasi ke kiri sebesar 120 derajat
         }
 
-    }  
-    
-    public void buatSierpinski(int ukuran, int x, int y){
-        int tengah = ukuran/2;
-        if (ukuran > 0){
-            buatSierpinski(tengah, x, y + tengah);
-            buatSierpinski(tengah, x+tengah/2, y);
-            buatSierpinski(tengah, x+tengah, tengah);
+    } 
+
+    public void buatSegitiga(int ukuran, int n, int m){
+        kurakuraku.setJejak(false);
+        kurakuraku.setPosition(new Dimension(n,m));
+        kurakuraku.setJejak(true);
+        for (int i=0;i<3;i++) {         // Looping untuk membuat gerakan berulang sehingga membentuk segitiga
+            kurakuraku.maju(ukuran);    // Maju sesuai ukurang yang diminta
+            kurakuraku.rotasi(-120);    // Melakukan rotasi ke kiri sebesar 120 derajat
         }
 
+    }  
+    
+
+    /**
+     * Fungsi ini membuat sebuah fungsi sierpinski gasket
+     * menerima 3 parameter, ukuran, dan 2 koordinat
+     * Akan membuat segitiga yang terus dilooping di sekitarnya 
+     * 
+     * @param ukuran
+     * @param x
+     * @param y
+     */
+    public void buatSierpinski(int ukuran, int n, int m){
+        if (ukuran > 0){
+            int mid = ukuran/2;
+            buatSierpinski(mid, n, m + mid);    //Rekursif untuk membuat segitiga sierpinski di sebelah kanan
+            buatSierpinski(mid, n+mid/2, m);    //Rekursif untuk membuat segitiga sierpinski di sebelah kiri
+            buatSierpinski(mid, n+mid, m+mid);  //Rekursif untuk membuat segitiga sierpinski di sebelah atas
+        }
         else{
-            buatSegitiga(ukuran);
+            buatSegitiga(ukuran, n, m);         //Pemanggulan fungsi buatSegitiga untuk membuat segitiga itu
         }
 
     }
@@ -252,31 +288,98 @@ public class Perintah {
         }
     }
 
-    public void buatPanah(int ukuran){
-        kurakuraku.maju(ukuran);
-        Dimension posisi = kurakuraku.getPosition();
-        kurakuraku.rotasi(135);
-        kurakuraku.maju(ukuran/4);
-        kurakuraku.setPosition(posisi);
-        kurakuraku.rotasi(-270);
-        kurakuraku.maju(ukuran/4);
-        kurakuraku.setPosition(posisi);
-        kurakuraku.rotasi(135);
-        kurakuraku.maju(ukuran/3);
-        kurakuraku.rotasi(135);
-        kurakuraku.maju(ukuran/4);
-        kurakuraku.setPosition(posisi);
-        kurakuraku.rotasi(-270);
-        kurakuraku.reset();
-    }
-
+    /**
+     * Fungsi membuat fractal kotak dimana kotak akan dikelilingi kotak lainnya
+     * Menerima parameter ukuran untuk menentukan ukuran dari kotak
+     * @param ukuran
+     */
     public void buatFractal(int ukuran){
-        int counter = 13;
-        if (counter > 0){
-            counter -= 1;
-            buatPanah(ukuran);
-            kurakuraku.rotasi (30);
-            buatFractal(ukuran);
+        if (ukuran > 0){
+            int satuan = ukuran/9;
+            kurakuraku.setJejak(true);
+            buatKotak(3*satuan); //Kotak tengah
+            kurakuraku.setJejak(false);
+
+            Dimension posisi_kotak_tengah = kurakuraku.getPosition();
+
+            // Kotak kiri atas
+            kurakuraku.rotasi(180);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak atas
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak kanan atas
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.maju(4 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak kiri
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak kanan
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(4 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak kiri bawah
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(5 * satuan);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(2 * satuan);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+
+            // Kotak bawah
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(5 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
+            
+            // Kotak kanan bawah
+            kurakuraku.setPosition(posisi_kotak_tengah);
+            kurakuraku.rotasi(90);
+            kurakuraku.maju(5 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(4 * satuan);
+            kurakuraku.rotasi(-90);
+            kurakuraku.maju(1 * satuan);
+            kurakuraku.rotasi(90);
+            buatFractal(3*satuan);
         }
     }
 
