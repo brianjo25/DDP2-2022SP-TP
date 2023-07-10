@@ -202,6 +202,12 @@ public class Perintah {
 
     } 
 
+
+    /**Merupakan fungsi tambahan untuk membantu sierpinski
+     * @param ukuran
+     * @param n
+     * @param m
+     */
     public void buatSegitiga(int ukuran, int n, int m){
         kurakuraku.setJejak(false);
         kurakuraku.setPosition(new Dimension(n,m));
