@@ -240,23 +240,43 @@ public class Perintah {
      * ukuran dari kotak pertama yang akan terus dikurangi dalam rekursif
      */
     public void buatBoxes(int ukuran){
-        kurakuraku.maju(ukuran);    
-        kurakuraku.rotasi(90);
-        kurakuraku.maju(ukuran);    
-        kurakuraku.rotasi(90);
-        kurakuraku.maju(ukuran);    
-        kurakuraku.rotasi(90);
-        kurakuraku.maju(ukuran);
-        kurakuraku.rotasi(90);
-
         if (ukuran > 0){
+            buatKotak(ukuran-20);
             kurakuraku.setJejak(false);
             kurakuraku.maju(10);
             kurakuraku.rotasi(90);
             kurakuraku.maju(10);
             kurakuraku.rotasi(270);
             kurakuraku.setJejak(true);
-            buatKotak(ukuran-20);
+            buatBoxes(ukuran-20);
+        }
+    }
+
+    public void buatPanah(int ukuran){
+        kurakuraku.maju(ukuran);
+        Dimension posisi = kurakuraku.getPosition();
+        kurakuraku.rotasi(135);
+        kurakuraku.maju(ukuran/4);
+        kurakuraku.setPosition(posisi);
+        kurakuraku.rotasi(-270);
+        kurakuraku.maju(ukuran/4);
+        kurakuraku.setPosition(posisi);
+        kurakuraku.rotasi(135);
+        kurakuraku.maju(ukuran/3);
+        kurakuraku.rotasi(135);
+        kurakuraku.maju(ukuran/4);
+        kurakuraku.setPosition(posisi);
+        kurakuraku.rotasi(-270);
+        kurakuraku.reset();
+    }
+
+    public void buatFractal(int ukuran){
+        int counter = 13;
+        if (counter > 0){
+            counter -= 1;
+            buatPanah(ukuran);
+            kurakuraku.rotasi (30);
+            buatFractal(ukuran);
         }
     }
 
