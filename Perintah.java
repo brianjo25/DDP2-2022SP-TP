@@ -230,7 +230,7 @@ public class Perintah {
      * @param y
      */
     public void buatSierpinski(int ukuran, int n, int m){
-        if (ukuran > 0){
+        if (ukuran > 30){
             int mid = ukuran/2;
             buatSierpinski(mid, n, m + mid);    //Rekursif untuk membuat segitiga sierpinski di sebelah kanan
             buatSierpinski(mid, n+mid/2, m);    //Rekursif untuk membuat segitiga sierpinski di sebelah kiri
