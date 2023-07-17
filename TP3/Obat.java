@@ -12,36 +12,37 @@ public class Obat {
 
     // TODO : Implementasi method getter getKategori
     public String getKategori(){
-        return "";
+        return kategori;
     }
 
     // TODO : Implementasi method getter getNama
     public String getNama(){
-        return "";
+        return nama;
     }
 
     // TODO : Implementasi method getter getHarga
     public int getHarga(){
-        return 0;
+        return harga;
     }
 
     // TODO : Implementasi method getter getStok
     public int getStok(){
-        return 0;
+        return stok;
     }
 
     // TODO : Implementasi method setter setKategori
     public void setKategori(String kategori){
+        this.kategori = kategori;
     }
 
     // TODO : Implementasi method setter setNama
     public void setStok(int stok){
-        return;
+        this.stok = stok;
     }
 
     // TODO : Implementasi method setter setHarga
     public void setHarga(int harga){
-        return;
+        this.harga = harga;
     }
 
 }
