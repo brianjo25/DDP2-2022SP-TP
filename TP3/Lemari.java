@@ -13,7 +13,13 @@ public class Lemari {
 
     // TODO : Implementasi method print
     public void print(){
-        return;
+        for (int i = (this.ukuran-1) ; i > -1 ; i--){
+            System.out.println(this.rak[i].getKategoriRak());
+            System.out.println("==================");
+            this.rak[i].printRak();
+            System.out.println("==================");
+            System.out.println();
+        }
     }
 
     // TODO : Implementasi method beliObat
@@ -28,6 +34,6 @@ public class Lemari {
 
     // TODO : Implementasi method getRak
     public Rak getRak(int i) {
-        return null;
+        return this.rak [i];
     }
 }
