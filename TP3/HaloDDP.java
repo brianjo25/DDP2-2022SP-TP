@@ -8,11 +8,31 @@ public class HaloDDP {
         System.out.print("Selamat datang Haloddp. Berapa ukuran lemari obat hari ini? (max row 5) ");
 
         // TODO : Implementasi validasi input ukuran lemari
+        String ukuran = "";
+        do {
+            System.out.print("Ukuran: ");
+            ukuran = input.nextLine();
+        } while (!ukuran.matches("\\d+x\\d+"));
+        String[] ukuranSplit = ukuran.split("x");
+        int rowLemari = Integer.valueOf(ukuranSplit[0]);
+        int columnLemari = Integer.valueOf(ukuranSplit[1]);
+
 
         // TODO : Buat objek lemari dengan ukuran yang sudah ditentukan
+        Lemari lemari = new Lemari(rowLemari);
 
         System.out.println("Silahkan tentukan kategori obat untuk setiap rak");
         // TODO : Implementasi input kategori rak
+        for (int i = 0; i < rowLemari; i++) {
+            System.out.print("Rak ke-" + (i+1) + ": ");
+            String kategori = input.nextLine();
+            lemari.addRak(new Rak(columnLemari, kategori), i);
+            System.out.println("Rak ke-" + (i+1) + " adalah rak obat " + kategori);
+        }
+
+        System.out.println("Rak obat hari ini: ");
+        lemari.print();
+
 
         while (true) {
             System.out.println();
